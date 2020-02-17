@@ -80,10 +80,11 @@ public class PriceListTest {
 
     @Test
     public void whatIsThePrice() {
-        int amount = 3;
-        //chosen item is item 2, its code is 19853
+        int amount = 3; //chosen item is item 2, its code is 19853
+        int amount1 = 2; //chosen item is item 1, its code is 11984
 
         double expected = amount * item2.getPrice();
+        double expected1 = amount1 * item1.getPrice();
 
         PriceList testList = new PriceList(new ArrayList<Item>());
         testList.setItem(item);
@@ -92,6 +93,11 @@ public class PriceListTest {
         double actual = testList.whatIsThePrice(item2.getCode(), amount);
         boolean result = (expected == actual);
 
-        Assert.assertEquals(result, true);
+        double actual1 = testList.whatIsThePrice(11985, amount1);
+        boolean result1 = (expected1 == actual1);
+
+        Assert.assertTrue(result);
+        Assert.assertFalse(result1);
     }
+
 }
