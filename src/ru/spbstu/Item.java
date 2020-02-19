@@ -2,12 +2,10 @@ package ru.spbstu;
 
 public class Item {
     String name;
-    int code;
     double price;
 
-    public Item(String name, int code, double price) {
+    public Item(String name, double price) {
         this.name = name;
-        this.code = code;
         this.price = price;
     }
 
@@ -23,10 +21,6 @@ public class Item {
         return price;
     }
 
-    public int getCode() {
-        return code;
-    }
-
     public String getName() {
         return name;
     }
@@ -35,14 +29,13 @@ public class Item {
         if (this == obj) return true;
         if (obj instanceof Item) {
             Item other = (Item) obj;
-            return name.equals(other.name) && price == other.price && code == other.code;
+            return name.equals(other.name) && price == other.price;
         }
         return false;
     }
 
     public String toString() {
         return ("name: " + this.getName() +
-                "\nprice: " + this.getPrice() +
-                "\ncode: " + this.getCode());
+                "\nprice: " + this.getPrice());
     }
 }

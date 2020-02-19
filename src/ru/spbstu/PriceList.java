@@ -1,86 +1,33 @@
 package ru.spbstu;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PriceList {
 
-    ArrayList<Item> priceList;
+    HashMap<Integer, Item> priceList;
 
-    public PriceList(ArrayList<Item> priceList){
+    public PriceList(HashMap<Integer, Item> priceList) {
         this.priceList = priceList;
     }
 
-    public void setItem(Item item){
-        priceList.add(item);
+    public void setItem(int code, Item item) {
+        priceList.put(code, item);
     }
 
-    public void delete(String name){
-        try {
-            int index = -1;
-            for (Item element : priceList) {
-                if (element.getName().equals(name)) {
-                    index = priceList.indexOf(element);
-                    break;
-                }
-            }
-            if (index != -1) {
-                priceList.remove(index);
-            }
-        }
-        catch (java.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Item with this name is not found. Try again.");
-        }
+    public void delete(int code) {
+        priceList.remove(code);
     }
 
-    public void changeItemPrice(String name, double newPrice){
-        try {
-            int index = -1;
-            for (Item element : priceList) {
-                if (element.getName().equals(name)) {
-                    index = priceList.indexOf(element);
-                    break;
-                }
-            }
-            if (index != -1) {
-                priceList.get(index).changePrice(newPrice);
-            }
-        }
-        catch (java.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Item with this name is not found. Try again.");
-        }
+    public void changeItemPrice(int code, double newPrice) {
+        priceList.get(code).changePrice(newPrice);
     }
 
-    public void changeItemName(String name, String newName){
-        int index = -1;
-        for (Item element : priceList) {
-            if (element.getName().equals(name)) {
-                index = priceList.indexOf(element);
-                break;
-            }
-        }
-        if (index != -1) {
-            priceList.get(index).changeName(newName);
-        }
+    public void changeItemName(int code, String newName) {
+        priceList.get(code).changeName(newName);
     }
 
-    public double whatIsThePrice(int code, int amount){
-        double currentPrice = 0.0;
-        try {
-            int index = -1;
-            for (Item element : priceList) {
-                if (element.getCode() == code) {
-                    index = priceList.indexOf(element);
-                    break;
-                }
-            }
-            if (index != 1) {
-                currentPrice = amount * priceList.get(index).getPrice();
-            }
-        }
-        catch (java.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Item with this code is not found. Try again.");
-        }
-        return currentPrice;
+    public double whatIsThePrice(int code, int amount) {
+        return priceList.get(code).getPrice() * amount;
     }
 
     public boolean equals(Object obj) {
@@ -94,7 +41,8 @@ public class PriceList {
 
     public String toString() {
         StringBuilder result = new StringBuilder();
-        priceList.forEach((Item) -> result.append(Item).append("\n"));
+        priceList.forEach((Integer, Item) -> result.append("code: ").append(Integer).append("\n").
+                append("item: ").append(Item).append("\n"));
         return result.toString();
     }
 }
