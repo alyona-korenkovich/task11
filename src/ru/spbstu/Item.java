@@ -1,23 +1,18 @@
 package ru.spbstu;
 
-public class Item {
-    String name;
-    double price;
+import java.util.Objects;
 
-    public Item(String name, double price) {
+public class Item {
+
+    String name;
+    Price price;
+
+    public Item(String name, Price price) {
         this.name = name;
         this.price = price;
     }
 
-    public void changePrice(double newPrice) {
-        this.price = newPrice;
-    }
-
-    public void changeName(String newName) {
-        this.name = newName;
-    }
-
-    public double getPrice() {
+    public Price getPrice() {
         return price;
     }
 
@@ -25,17 +20,32 @@ public class Item {
         return name;
     }
 
+    public void changeName(String newName) {
+        this.name = newName;
+    }
+
+    public void changePrice(Price newPrice) {
+        this.price = newPrice;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj instanceof Item) {
             Item other = (Item) obj;
-            return name.equals(other.name) && price == other.price;
+            return name.equals(other.name) && price.equals(other.price);
         }
         return false;
     }
 
+    @Override
     public String toString() {
         return ("name: " + this.getName() +
-                "\nprice: " + this.getPrice());
+                "   price: " + this.getPrice());
+    }
+
+    @Override
+    public int hashCode() {
+        return (Objects.hash(name, price));
     }
 }

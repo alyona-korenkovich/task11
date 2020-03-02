@@ -1,85 +1,82 @@
 package ru.spbstu;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.HashMap;
+import org.junit.rules.ExpectedException;
 
 public class PriceListTest {
 
-    Item pen = new Item("Pen", 30.99);
-    Item brush = new Item("Brush", 150.99);
-    Item brushWithNewName = new Item("Brush 3000", 150.99);
-    Item paint = new Item("Paint", 699.99);
-    Item clay = new Item("Clay", 95.99);
-    Item clayWithChangedPrice = new Item("Clay", 65.99);
+    private PriceList actual = new PriceList();
+    private PriceList expected = new PriceList();
+
+    Item pen = new Item("Pen", new Price(30, 90));
+    Item brush = new Item("Brush", new Price(150, 99));
+    Item brushWithNewName = new Item("Brush 3000", new Price(150, 99));
+    Item paint = new Item("Paint", new Price(699, 99));
+    Item clay = new Item("Clay", new Price(95, 99));
+    Item clayWithChangedPrice = new Item("Clay", new Price(65, 99));
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
     public void setItem() {
-        HashMap<Integer, Item> testMap = new HashMap<>();
-        testMap.put(17309, pen);
-        PriceList expected = new PriceList(testMap);
+        actual.setItem(19389, pen);
+        actual.setItem(19390, brush);
+        Assert.assertEquals(actual.getItem(19389), pen);
 
-        PriceList actual = new PriceList(new HashMap<>());
-        actual.setItem(17309, pen);
-
-        Assert.assertEquals(expected, actual);
+        exceptionRule.expect(IllegalArgumentException.class);
+        actual.setItem(19389, paint);
     }
 
     @Test
     public void delete() {
-        HashMap<Integer, Item> testMap = new HashMap<>();
-        testMap.put(19389, pen);
-        testMap.put(19390, brush);
-        testMap.put(19392, clay);
-        PriceList expected = new PriceList(testMap);
+        actual.setItem(19389, pen);
+        actual.setItem(19390, brush);
+        actual.setItem(19391, paint);
+        actual.setItem(19392, clay);
 
-        HashMap<Integer, Item> testMap1 = new HashMap<>();
-        testMap1.put(19389, pen);
-        testMap1.put(19390, brush);
-        testMap1.put(19391, paint);
-        testMap1.put(19392, clay);
-        PriceList actual = new PriceList(testMap1);
-        actual.delete(19391);
+        expected.setItem(19389, pen);
+        expected.setItem(19390, brush);
+        expected.setItem(19391, paint);
+        expected.setItem(19392, clay);
 
         Assert.assertEquals(expected, actual);
+        actual.delete(19390);
+        Assert.assertNotEquals(expected, actual);
+
+        exceptionRule.expect(IllegalArgumentException.class);
+        actual.delete(17234);
     }
 
     @Test
     public void changeItemPrice() {
-        HashMap<Integer, Item> testMap = new HashMap<>();
-        testMap.put(19389, pen);
-        testMap.put(19390, brush);
-        testMap.put(19391, paint);
-        testMap.put(19392, clayWithChangedPrice);
-        PriceList expected = new PriceList(testMap);
+        expected.setItem(19389, pen);
+        expected.setItem(19390, brush);
+        expected.setItem(19391, paint);
+        expected.setItem(19392, clayWithChangedPrice);
 
-        HashMap<Integer, Item> testMap1 = new HashMap<>();
-        testMap1.put(19389, pen);
-        testMap1.put(19390, brush);
-        testMap1.put(19391, paint);
-        testMap1.put(19392, clay);
-        PriceList actual = new PriceList(testMap1);
-        actual.changeItemPrice(19392, 65.99);
+        actual.setItem(19389, pen);
+        actual.setItem(19390, brush);
+        actual.setItem(19391, paint);
+        actual.setItem(19392, clay);
+        actual.changeItemPrice(19392, new Price(65, 99));
 
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void changeItemName() {
-        HashMap<Integer, Item> testMap = new HashMap<>();
-        testMap.put(19389, pen);
-        testMap.put(19390, brushWithNewName);
-        testMap.put(19391, paint);
-        testMap.put(19392, clay);
-        PriceList expected = new PriceList(testMap);
+        expected.setItem(19389, pen);
+        expected.setItem(19390, brushWithNewName);
+        expected.setItem(19391, paint);
+        expected.setItem(19392, clay);
 
-        HashMap<Integer, Item> testMap1 = new HashMap<>();
-        testMap1.put(19389, pen);
-        testMap1.put(19390, brush);
-        testMap1.put(19391, paint);
-        testMap1.put(19392, clay);
-        PriceList actual = new PriceList(testMap1);
+        actual.setItem(19389, pen);
+        actual.setItem(19390, brush);
+        actual.setItem(19391, paint);
+        actual.setItem(19392, clay);
         actual.changeItemName(19390, "Brush 3000");
 
         Assert.assertEquals(expected, actual);
@@ -88,16 +85,14 @@ public class PriceListTest {
     @Test
     public void whatIsThePrice() {
         int amount = 3;
-        double expected = 95.99 * amount;
+        Price expectedList = new Price(287, 97);
 
-        HashMap<Integer, Item> testMap1 = new HashMap<>();
-        testMap1.put(19389, pen);
-        testMap1.put(19390, brush);
-        testMap1.put(19391, paint);
-        testMap1.put(19392, clay);
-        PriceList actualList = new PriceList(testMap1);
-        double actual = actualList.whatIsThePrice(19392, amount);
+        actual.setItem(19389, pen);
+        actual.setItem(19390, brush);
+        actual.setItem(19391, paint);
+        actual.setItem(19392, clay);
+        Price actualList = actual.whatIsThePrice(19392, amount);
 
-        Assert.assertEquals(expected, actual, 0.0);
+        Assert.assertEquals(expectedList, actualList);
     }
 }
