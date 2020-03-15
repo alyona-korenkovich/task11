@@ -7,49 +7,41 @@ public class PriceList {
 
     private HashMap<Integer, Item> priceList = new HashMap<>();
 
+    public Item setItem(int code, Item item) {
+        Item res = priceList.get(code);
+        priceList.put(code, item);
+        return res;
+    }
+
+    public Item delete(int code) {
+        if (!priceList.containsKey(code)) throw new IllegalArgumentException();
+        Item res = priceList.get(code);
+        priceList.remove(code);
+        return res;
+    }
+
     public Item getItem(int code) {
         return priceList.get(code);
     }
 
-    public boolean setItem(int code, Item item) {
-        if (priceList.containsKey(code)) throw new IllegalArgumentException();
-        priceList.put(code, item);
-        return true;
-    }
-
-    public boolean delete(int code) {
-        if (!priceList.containsKey(code)) throw new IllegalArgumentException();
-        priceList.remove(code);
-        return true;
-    }
-
     public void changeItemPrice(int code, Price newPrice) {
-        if (priceList.containsKey(code)) {
-            priceList.get(code).changePrice(newPrice);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        if (!priceList.containsKey(code)) throw new IllegalArgumentException();
+        priceList.get(code).changePrice(newPrice);
     }
 
     public void changeItemName(int code, String newName) {
-        if (priceList.containsKey(code)) {
-            priceList.get(code).changeName(newName);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        if (!priceList.containsKey(code)) throw new IllegalArgumentException();
+        priceList.get(code).changeName(newName);
     }
 
     public Price whatIsThePrice(int code, int amount) {
-        if (priceList.containsKey(code)) {
-            int rublesInPennies = priceList.get(code).getPrice().getRubles() * 100;
-            int pennies = priceList.get(code).getPrice().getPennies();
-            int currentPriceInPennies = (rublesInPennies + pennies) * amount;
-            int newRubles = currentPriceInPennies / 100;
-            int newPennies = currentPriceInPennies - newRubles * 100;
-            return new Price(newRubles, newPennies);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        if (!priceList.containsKey(code)) throw new IllegalArgumentException();
+        int rublesInPennies = priceList.get(code).getPrice().getRubles() * 100;
+        int pennies = priceList.get(code).getPrice().getPennies();
+        int currentPriceInPennies = (rublesInPennies + pennies) * amount;
+        int newRubles = currentPriceInPennies / 100;
+        int newPennies = currentPriceInPennies - newRubles * 100;
+        return new Price(newRubles, newPennies);
     }
 
     @Override
